@@ -7,8 +7,18 @@ To compile/install/use please read lundman's documentation on his website.
 
 If you want to use the engine with ftps implicit/explicit SSL/TLS you probably need to modify the cfg_tlsciphers in tls.c in the lion library to: static char cfg_tlsciphers[] = "ALL";
 
+linknet/#fxp.one
+
+CHANGES:
+
+2017-12-23: first attempt on adding 'stat -al' support for fxp.one... still learning the code and github so don't shoot me ;-)
+The engine was modified to support 'stat -al' dirlisting and use_stat with yna-type in the sitedefinition to make stat/list configurable. Therefore also the API was changed, SITELIST now includes USE_STAT in it's reply e.g.:
+
+      SITELIST|SITEID=1|NAME=localhost2|HOST=127.0.0.1|PORT=56688|USER=test|PASS=ing|USE_STAT=2|PASSIVE=1|
+            FXP_PASSIVE=2|CONTROL_TLS=2|DATA_TLS=2
 
 
+--------------------------------------------------------------------------------------------------------------------------------------
 below follows the original README.md from lundman.
 
 http://lundman.net/wiki/index.php/FXP.One
