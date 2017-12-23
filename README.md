@@ -1,6 +1,15 @@
 FXP.One
 =======
 
+First of all many thanks to lundman for a great ftp/fxp engine!!!
+
+To compile/install/use please read lundman's documentation on his website.
+
+If you want to use the engine with ftps implicit/explicit SSL/TLS you probably need to modify the cfg_tlsciphers in tls.c in the lion library to: static char cfg_tlsciphers[] = "ALL";
+
+
+
+below follows the original README.md from lundman.
 
 http://lundman.net/wiki/index.php/FXP.One
 
