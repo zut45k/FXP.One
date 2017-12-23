@@ -284,6 +284,7 @@ sites_t *sites_newnode(void)
 
 
 	// Set defaults.
+	result->use_stat     = YNA_AUTO;
 	result->passive      = YNA_AUTO;
 	result->fxp_passive  = YNA_AUTO;
 	result->control_TLS  = YNA_AUTO;
@@ -371,6 +372,11 @@ int sites_parsekeys(char **keys, char **values, int items, sites_t *node)
 		} else if (tester("port")) {
 			if (!values[i]) continue;
 			node->port = atoi(values[i]);
+			keys[i] = NULL;
+			xitems--;
+		} else if (tester("use_stat")) {
+			if (!values[i]) continue;
+			node->use_stat = str2yna(values[i]);
 			keys[i] = NULL;
 			xitems--;
 		} else if (tester("passive")) {
@@ -718,13 +724,14 @@ void sites_listentry(lion_t *handle, sites_t *runner, int id)
 	if (id == SITES_LIST_SAVE)
 		lion_printf(handle,
 					"SITE|NAME=%s|HOST=%s|PORT=%u|USER=%s|PASS=%s|"
-					"PASSIVE=%u|FXP_PASSIVE=%u|CONTROL_TLS=%u|"
+					"USE_STAT=%u|PASSIVE=%u|FXP_PASSIVE=%u|CONTROL_TLS=%u|"
 					"DATA_TLS=%u",
 					runner->name,
 					runner->host ? runner->host : "",
 					runner->port,
 					runner->user ? runner->user : "",
 					runner->pass ? runner->pass : "",
+					runner->use_stat,
 					runner->passive,
 					runner->fxp_passive,
 					runner->control_TLS,
@@ -732,7 +739,7 @@ void sites_listentry(lion_t *handle, sites_t *runner, int id)
 	else
 		lion_printf(handle,
 					"SITELIST|SITEID=%u|NAME=%s|HOST=%s|PORT=%u|USER=%s|PASS=%s|"
-					"PASSIVE=%u|FXP_PASSIVE=%u|CONTROL_TLS=%u|"
+					"USE_STAT=%u|PASSIVE=%u|FXP_PASSIVE=%u|CONTROL_TLS=%u|"
 					"DATA_TLS=%u",
 					runner->id,
 					runner->name,
@@ -740,6 +747,7 @@ void sites_listentry(lion_t *handle, sites_t *runner, int id)
 					runner->port,
 					runner->user ? runner->user : "",
 					runner->pass ? runner->pass : "",
+					runner->use_stat,
 					runner->passive,
 					runner->fxp_passive,
 					runner->control_TLS,

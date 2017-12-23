@@ -36,6 +36,7 @@ typedef struct sites_struct {
 	char *user;
 	char *pass;
 
+	yesnoauto_t use_stat; // yes/auto -> uses 'stat -al' for dirlisting instead of 'list'
 	yesnoauto_t passive;  // yes -> user pasv, no -> use port, auto -> try pasv
 	                      // then port.
 

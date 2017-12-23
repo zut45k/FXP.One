@@ -230,6 +230,7 @@ function defaultSite()
     site["USER"]         = "";
     site["PASS"]         = "";
     site["STARTDIR"]     = "";
+    site["USE_STAT"]     = "2";
     site["PASSIVE"]      = "2";
     site["FXP_PASSIVE"]  = "2";
     site["CONTROL_TLS"]  = "2";
@@ -265,6 +266,7 @@ function getExtraPairs(site)
         case 'USER':
         case 'PASS':
         case 'STARTDIR':
+        case 'USE_STAT':
         case 'PASSIVE':
         case 'FXP_PASSIVE':
         case 'CONTROL_TLS':
@@ -310,6 +312,7 @@ function doSMSiteChange()
     document.getElementById("sm_user").value = site["USER"];
     document.getElementById("sm_pass").value = site["PASS"];
     document.getElementById("sm_startdir").value = "STARTDIR" in site ? site["STARTDIR"] : "";
+    document.getElementById("sm_stat").value = site["USE_STAT"];
     document.getElementById("sm_pasv").value = site["PASSIVE"];
     document.getElementById("sm_fxpp").value = site["FXP_PASSIVE"];
     document.getElementById("sm_cssl").value = site["CONTROL_TLS"];
@@ -403,6 +406,9 @@ function smSaveSite()
     if ((val = document.getElementById("sm_startdir").value) !==
         (("STARTDIR" in site) ? site["STARTDIR"] : plain["STARTDIR"]))
         save += "|STARTDIR="+val;
+    if ((val = document.getElementById("sm_stat").value) !==
+        (("USE_STAT" in site) ? site["USE_STAT"] : plain["USE_STAT"]))
+        save += "|USE_STAT="+val;
     if ((val = document.getElementById("sm_pasv").value) !==
         (("PASSIVE" in site) ? site["PASSIVE"] : plain["PASSIVE"]))
         save += "|PASSIVE="+val;

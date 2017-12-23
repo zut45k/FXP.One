@@ -29,7 +29,7 @@ file_t *file_parse(char *line, int raw)
 	yesnoauto_t directory = YNA_NO;
 	yesnoauto_t soft_link = YNA_NO;
 
-	//debugf("  [file] '%s'\n", line);
+	debugf("  [file] '%s'\n", line);
 
 	if (!line) return NULL;
 

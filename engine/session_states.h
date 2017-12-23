@@ -59,7 +59,9 @@ enum session_states {
 
 	SESSION_ST_PWD_INTERNAL,	// 42
 
-	SESSION_ST_TEST			// 43
+	SESSION_ST_STAT_REPLY,		// 43
+
+	SESSION_ST_TEST				// 44
 };
 
 typedef enum session_states session_state_t;

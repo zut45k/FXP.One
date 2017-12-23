@@ -240,6 +240,11 @@ Local: <input type="checkbox" id="sm_local"
   <br/>
  Startdir: <input type="text" id="sm_startdir"
      title="Change to directory (leave empty for root)" value="" onchange="">
+USE-STAT: <select id="sm_stat" title="Use stat -al for listing directories." onChange="">
+    <option value="2">Auto</option>
+    <option value="1">Yes</option>
+    <option value="0">No</option>
+  </select>
 Passive: <select id="sm_pasv" title="Use passive method when listing directories." onChange="">
     <option value="2">Auto</option>
     <option value="1">Yes</option>
