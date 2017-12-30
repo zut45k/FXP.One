@@ -108,6 +108,11 @@ int data_handler(lion_t *handle, void *user_data, int status, int size,
 #ifdef DEBUG_VERBOSE
 		debugf("  [data] '%s'\n", line);
 #endif
+#ifdef DEBUG_FTPSRV
+		debugf("<<< '%s': '%s'\n",
+			   session->site->name,
+			   line);
+#endif
 		session_parse(session, line);
 		break;
 

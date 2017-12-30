@@ -12,7 +12,7 @@
 //#define debugf
 
 
-
+#define DEBUG_FTPSRV 1
 
 
 // Variables

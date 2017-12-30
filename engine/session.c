@@ -336,11 +336,17 @@ int session_handler(lion_t *handle, void *user_data,
 
 	case LION_INPUT:
 
-		if (debug_on > 1)
-			if (line && session && session->site && session->site->name)
-				debugf("*** '%s' INPUT '%s'\n",
+//		if (debug_on > 1)
+#ifdef DEBUG_FTPSRV
+			if (line && session && session->site && session->site->name) {
+				debugf("<<< '%s': '%s'\n",
 					   session->site->name,
 					   line);
+			} else {
+				debugf("<<< '%s'\n",
+					   line);
+			}
+#endif
 		// We got input. Check if
 		//
 		// !isidle - check if it is a reply, or interim.
@@ -538,7 +544,12 @@ void session_cmdq_restart(session_t *session)
 						strlen(session->cmdq[0].cmd));
 
 			if (strncmp("PASS ", session->cmdq[0].cmd, 5))
-				debugf("[session] sending cmdq '%s'\n", session->cmdq[0].cmd);
+//				debugf("[session] sending cmdq '%s'\n", session->cmdq[0].cmd);
+#ifdef DEBUG_FTPSRV
+				debugf(">>> '%s': '%s'\n",
+					   session->site->name,
+					   session->cmdq[0].cmd);
+#endif
 		}
 		return;
 	}
