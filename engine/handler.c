@@ -691,7 +691,10 @@ void handler_queue(session_t *session, int event, int id, int reply,
 				if (session->status & STATUS_ON_XDUPE) {
 					// Look for X-DUPE lines, remember these are url
 					// encoded.
-					if (!strncasecmp("226-+X-DUPE%3A+", line, 15))
+					// glftpd sends '553- X-DUPE: ' lines, also see:
+					// https://www.smartftp.com/static/Products/SmartFTP/RFC/x-dupe-info.txt
+					if (!strncasecmp("553-+X-DUPE%3A+", line, 15)
+						|| !strncasecmp("226-+X-DUPE%3A+", line, 15))
 						queue_xdupe_item(queue, &line[15]);
 				}
 				break;
