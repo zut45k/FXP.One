@@ -29,9 +29,13 @@ file_t *file_parse(char *line, int raw)
 	yesnoauto_t directory = YNA_NO;
 	yesnoauto_t soft_link = YNA_NO;
 
-	debugf("  [file] '%s'\n", line);
+//	debugf("[file] <%s>\n", line);
 
 	if (!line) return NULL;
+
+	if (!strncmp("213-", line, 4)) {  // it's the "213- status of -al:" line, ignore it.
+		return NULL;
+	}
 
 	result = (file_t *) malloc(sizeof(*result));
 	if (!result) return NULL;
