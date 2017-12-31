@@ -241,6 +241,7 @@ int main(int argc, char **argv)
 	}
 
 	fflush(stdout);
+	setbuf(stdout, NULL); // disable buffering on stoud
 
     if (stat(".FXP.One.users", &stbf)) {
         engine_firstrun = 1;
