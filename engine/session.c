@@ -1249,15 +1249,16 @@ void session_state_process(session_t *session, int reply, char *line)
 						  SESSION_ST_MISC_REPLY_SYST,
 						  "SYST\r\n");
 
-		session_cmdq_newf(session,
-						  SESSION_CMDQ_FLAG_INTERNAL,
-						  SESSION_ST_MISC_REPLY_CLNT,
-						  "CLNT FXP.One engine %d.%d (#%d protocol %d.%d) \r\n",
-						  VERSION_MAJOR,
-						  VERSION_MINOR,
-						  VERSION_BUILD,
-						  PROTOCOL_MAJOR,
-						  PROTOCOL_MINOR);
+// don't need this, every millisecond counts while racing ;-)
+//		session_cmdq_newf(session,
+//						  SESSION_CMDQ_FLAG_INTERNAL,
+//						  SESSION_ST_MISC_REPLY_CLNT,
+//						  "CLNT FXP.One engine %d.%d (#%d protocol %d.%d) \r\n",
+//						  VERSION_MAJOR,
+//						  VERSION_MINOR,
+//						  VERSION_BUILD,
+//						  PROTOCOL_MAJOR,
+//						  PROTOCOL_MINOR);
 
 		// Feat is last, once we get its reply
 		// we tell the client
@@ -1309,13 +1310,26 @@ void session_state_process(session_t *session, int reply, char *line)
 				session->status |= STATUS_ON_XDUPE;
 		}
 
-		session_send_xdupe(session);
+		if (!(session->status & STATUS_ON_XDUPE)) {
+			session_send_xdupe(session);
+			// abuse STATUS_ON_XDUPE temporarily so we know we sent
+			// xdupe command to server already, otherwise it gets sent for
+			// every feature the server replies
+			session->status |= STATUS_ON_XDUPE;
+		}
 
 		break;
 
 	case SESSION_ST_MISC_REPLY_XDUPE:
-		if (reply == 200)
-			session->status |= STATUS_ON_XDUPE;
+		// parse xdupe reply and set STATUS_ON_XDUPE accordingly
+		if (reply == 200) {
+			if (!mystrccmp("+Activated", line))
+				session->status |= STATUS_ON_XDUPE;
+				break;
+			if (!mystrccmp("+Disabled", line))
+				session->status &= !STATUS_ON_XDUPE;
+				break;
+		}
 		break;
 
 	case SESSION_ST_TYPE_REPLY:
