@@ -169,7 +169,11 @@ int command2_handler(lion_t *handle, void *user_data,
 
 
 	case LION_INPUT:
+#ifdef DEBUG_ENGINE
+		debugf("->> '%s'\n", line);
+#else
 		debugf("[command2] input '%s'\n", line);
+#endif
 
 		if (user_data)
 			parser_command(command_authenticated_list, line, user_data);

@@ -498,7 +498,11 @@ int http_engine_handler(lion_t *handle, void *user_data,
         if (relay && relay->http_handle && (size>0) && line && *line) {
             char *send = NULL;
             uint32_t len = 0;
+#ifdef DEBUG_ENGINE
+            debugf("<<- '%s'\n", line);
+#else
             debugf("[http] engine '%s'\n", line);
+#endif
             // Make 'framed' buffer, and send it.
 
             /*

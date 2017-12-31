@@ -13,7 +13,7 @@
 
 
 #define DEBUG_FTPSRV 1
-
+#define DEBUG_ENGINE 1
 
 // Variables
 
