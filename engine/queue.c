@@ -631,12 +631,12 @@ void queue_del(queue_t *queue, char *at, lion_t *handle)
 	unsigned int pos;
 	unsigned int nat;
 
-	if (!queue || !handle) return;
+	if (!queue) return;
 
 	nat = atoi(at);
 
 	// If we are active, we can not delete pos 0
-	if ((queue->state != QUEUE_IDLE) &&
+	if (handle && (queue->state != QUEUE_IDLE) &&
 		(nat == 0)) {
 		lion_printf(handle, "QDEL|QID=%u|@=%u|CODE=1404|MSG=QITEM is active/transferring.\r\n",
 					queue->id,nat);
@@ -661,8 +661,9 @@ void queue_del(queue_t *queue, char *at, lion_t *handle)
 
 			queue_freeitem(node);
 
-			lion_printf(handle, "QDEL|QID=%u|CODE=0|@=%u|ITEMS=%u|MSG=OK\r\n",
-						queue->id, nat, queue->num_items);
+			if (handle)
+				lion_printf(handle, "QDEL|QID=%u|CODE=0|@=%u|ITEMS=%u|MSG=OK\r\n",
+							queue->id, nat, queue->num_items);
 			return;
 
 		}
@@ -670,9 +671,10 @@ void queue_del(queue_t *queue, char *at, lion_t *handle)
 
 	}
 
-	lion_printf(handle,
-				"QDEL|QID=%u|CODE=1517|MSG=No queue item at position @=%u\r\n",
-				queue->id, atoi(at));
+	if (handle)
+		lion_printf(handle,
+					"QDEL|QID=%u|CODE=1517|MSG=No queue item at position @=%u\r\n",
+					queue->id, atoi(at));
 
 }
 
@@ -686,7 +688,7 @@ void queue_move(queue_t *queue, char *from, char *to, lion_t *handle)
 	unsigned int pos;
 	int nfrom;
 
-	if (!queue || !handle) return;
+	if (!queue) return;
 
 	nfrom = atoi(from);
 
@@ -695,7 +697,7 @@ void queue_move(queue_t *queue, char *from, char *to, lion_t *handle)
 	// first item, or TO first item.
 	if (queue->state != QUEUE_IDLE) {
 
-		if (nfrom == 0) {
+		if (handle && nfrom == 0) {
 
 			lion_printf(handle, "QMOVE|QID=%u|FROM=%u|TO=%s|CODE=1404|MSG=QITEM is active/transferring.\r\n",
 						queue->id,nfrom,to);
@@ -3212,19 +3214,23 @@ void queue_xdupe_item(queue_t *queue, char *name)
 		return;
 
 	// It COULD be the item is actually the item WE just finished
+	// if it is then stop processing this file and set queuestate to idle
 	if (!pos) {
 		debugf("[queue] XDUPE is for our item, ignoring.\n");
+		queue->state = QUEUE_IDLE;
 		return;
 	}
 
 	// Re-queue it.
+	// ZUT: !! NO, do not requeue it. the item was xduped so no use trying
+	//         to transfer again, so delete it.
 	// Not happy that I have to print the position into a string to
 	// pass. We should use enums internally.
 
 	debugf("[queue] re-queuing\n");
 	snprintf(buffer, sizeof(buffer), "%u", (unsigned int)pos);
-	queue_move(queue, buffer, "LAST", NULL);
-
+//	queue_move(queue, buffer, "LAST", NULL);
+	queue_del(queue, buffer, NULL);
 
 }
 
