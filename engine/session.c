@@ -1238,10 +1238,16 @@ void session_state_process(session_t *session, int reply, char *line)
 
 
 		if (session->features & FEATURE_SSL)
+			// https://tools.ietf.org/html/rfc4217#section-9
+			// 'Thus, the PBSZ command MUST still be issued, but must
+		    //  have a parameter of '0' to indicate that no buffering is taking
+		    //  place and the data connection should not be encapsulated.'
+			//  so 'PBSZ 1024' should be 'PBSZ 0' which fixes the glftpd error,
+			//  '504 PBSZ 1024 unsupported', returned on PBSZ 1024.
 			session_cmdq_new(session,
 							 SESSION_CMDQ_FLAG_INTERNAL,
 							 SESSION_ST_REPLY_PBSZ,
-							 "PBSZ 1024\r\n");
+							 "PBSZ 0\r\n");
 
 
 		session_cmdq_newf(session,
