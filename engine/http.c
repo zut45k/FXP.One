@@ -7,7 +7,7 @@
 // This takes new connections on the command socket, and once they are
 // authenticated, passes the connection to command2.c
 //
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

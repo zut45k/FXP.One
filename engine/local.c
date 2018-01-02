@@ -7,7 +7,7 @@
 // like normal. The only hooks required are for PASV, so we know which
 // (if multihomed) interface IP we should reply as.
 //
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include <stdio.h>
